@@ -37,7 +37,14 @@ export default function Friends() {
         <Typography fontWeight="bold" fontSize={32}>
           My friends
         </Typography>
-        <Stack spacing={3} pt={1} alignItems="center" width="70%">
+        <Stack
+            spacing={3}
+            pt={1}
+            alignItems="center"
+            width="70%"
+            height="90%"
+            style={{ background: "#ffffff", padding: 7, borderRadius: 10, border: "1px solid gray" }}
+        >
             {
                 friends_list.map(
                     (item) => (
