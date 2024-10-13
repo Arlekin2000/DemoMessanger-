@@ -4,6 +4,7 @@ import React from 'react';
 import './App.css';
 import Login from './Login';
 import Friends from './Friends';
+import Messages from "./Messages";
 import { Profile } from './Profile';
 import { Header } from './Header';
 import { Stack } from '@mui/material';
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/friends" element={<Friends />} />
+              <Route path="/messages" element={<Messages />} />
             </Routes>
           </Stack>
         ) : (
