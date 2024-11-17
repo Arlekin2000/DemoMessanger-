@@ -1,9 +1,10 @@
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
-from pathlib import Path
+
+from .utils import load_configs
 
 
-ROOT = Path(__file__).parent.parent.absolute()
+cfg = load_configs()
 app = fastapi.FastAPI()
 
 from backend.api.users.v1.auth.handlers import router as users_router

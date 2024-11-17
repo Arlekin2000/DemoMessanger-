@@ -1,11 +1,12 @@
 from peewee_aio import AIOModel, fields, Manager
 import datetime as dt
 
-from backend import ROOT
+from backend import cfg
 
 
 db = Manager(
-    f"aiosqlite:///{ROOT}/db.sqlite"
+    cfg.PEEWEE_CONNECTION,
+    **cfg.PEEWEE_CONNECTION_PARAMS
 )
 
 

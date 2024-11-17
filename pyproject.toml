@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "demomessanger-"
+version = "0.1.0"
+description = ""
+authors = ["Kruzzz <ivan4dante@gmail.com >"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.4"
+peewee = "^3.17.7"
+peewee-aio = "^2.0.0"
+uvicorn = "^0.32.0"
+aiosqlite = "^0.20.0"
+marshmallow = "^3.23.1"
+pyjwt = "^2.9.0"
+modconfig = "^1.2.1"
+pytest-aio = "^1.9.0"
+pytest-env = "^1.1.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "-xslv"
+python_files = "*test*.py"
+env = [
+    "ENV=tests"
+]
