@@ -1,5 +1,3 @@
-from ctypes import windll
-
 import pytest
 from fastapi.testclient import TestClient
 
