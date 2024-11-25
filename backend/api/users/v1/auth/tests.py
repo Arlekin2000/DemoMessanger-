@@ -1,3 +1,5 @@
+from cryptography.hazmat.primitives.keywrap import aes_key_wrap
+
 from backend.models import User
 
 
@@ -8,4 +10,26 @@ async def test_auth(app, client):
         "/api/users/v1/login",
         json={"email": "dokvor63@mail.ru", "password": "123"},
     )
+    assert res.status_code == 404
+
+    res = client.post(
+        "/api/users/v1/register",
+        json={"email": "dokvor63@mail.ru", "password": "123"},
+    )
     assert res.status_code == 200
+    json = res.json()
+    assert json["success"]
+    assert json["id"]
+    assert json["token"]
+
+    assert await User.select().count() == 1
+
+    res = client.post(
+        "/api/users/v1/login",
+        json={"email": "dokvor63@mail.ru", "password": "123"},
+    )
+    assert res.status_code == 200
+    json = res.json()
+    assert json["success"]
+    assert json["id"]
+    assert json["token"]

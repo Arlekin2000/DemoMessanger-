@@ -15,9 +15,9 @@ async def login(request: fastapi.Request):
 
     user = await User.select().where(User.email == data["email"]).first()
     if not user:
-        return fastapi.HTTPException(status_code=404, detail="User not found")
+        raise fastapi.HTTPException(status_code=404, detail="User not found")
     if not user.check_password(data["password"]):
-        return fastapi.HTTPException(status_code=401, detail="Incorrect password")
+        raise fastapi.HTTPException(status_code=401, detail="Incorrect password")
     return {"success": True, "id": user.id, "token": user.token}
 
 
