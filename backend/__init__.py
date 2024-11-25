@@ -8,7 +8,9 @@ cfg = load_configs()
 app = fastapi.FastAPI()
 
 from backend.api.users.v1.auth.handlers import router as users_router
+from backend.api.users.v1.profile.handlers import router as profile_router
 app.include_router(users_router)
+app.include_router(profile_router)
 
 origins = ["http://localhost:*", ]
 app.add_middleware(
