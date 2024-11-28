@@ -15,6 +15,7 @@ def client(app):
 
 @pytest.fixture(autouse=True)
 async def setup_tests(app):
+    """Rollback the database between tests."""
     from backend.models import db, User
 
     async with db.transaction() as trans:

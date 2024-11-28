@@ -37,7 +37,7 @@ export default function Messages() {
             id: 101,
             main: true,
             timestamp: "21:00",
-            text: "Hey, Givi",
+            text: "Hey, Leonid",
             username: "me"
         },
         {

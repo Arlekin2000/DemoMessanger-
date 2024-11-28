@@ -24,9 +24,12 @@ class User(BaseModel):
     email = fields.CharField(unique=True, null=False)
     password_hash = fields.CharField(null=True)
 
+    def __str__(self):
+        return f"User <#{self.id} {self.email}>"
+
     @property
     def token(self):
-        return jwt.encode({"id":self.id, "email":self.email}, SECRET, algorithm="HS256")
+        return jwt.encode({"id": self.id, "email": self.email}, SECRET, algorithm="HS256")
 
     @classmethod
     async def load_from_token(cls, token):
@@ -37,11 +40,11 @@ class User(BaseModel):
             .first()
         )
 
-    async def set_password(self, password:str):
+    async def set_password(self, password: str):
         self.password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
         await self.save()
         return True
 
-    def check_password(self, password:str):
+    def check_password(self, password: str):
         phash = hashlib.sha256(password.encode('utf-8')).hexdigest()
         return phash == self.password_hash

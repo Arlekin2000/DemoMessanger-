@@ -31,3 +31,5 @@ async def test_auth(app, client):
     assert json["success"]
     assert json["id"]
     assert json["token"]
+
+    assert await User.select().count() == 1

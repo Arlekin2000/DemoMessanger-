@@ -16,10 +16,10 @@ export default function Login() {
 
   const login = async () => {
     const data = {
-      method: "POST",
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({email: email, password: password})
-    }
+    };
     const res = fetch('http://localhost:8000/api/users/v1/login', data)
         .then(res => res.json())
         .then(
@@ -65,8 +65,8 @@ export default function Login() {
   const handleButtonClick = async (action_type: string) => {
     if (action_type == 'login') {
       await login()
-    } else if (action_type == 'register'){
-      await register()
+    } else if (action_type == 'register') {
+      await register();
     }
 
     if (cookies.auth) navigate('/profile');

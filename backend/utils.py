@@ -7,4 +7,5 @@ def load_configs():
     cfg = Config(f"backend.config.{env}")
     if os.path.exists("backend/config/local.py") and not env == "tests":
         cfg.update_from_modules("backend.config.local")
+
     return cfg
