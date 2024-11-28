@@ -1,5 +1,3 @@
-from cryptography.hazmat.primitives.keywrap import aes_key_wrap
-
 from backend.models import User
 
 
