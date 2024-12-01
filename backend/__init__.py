@@ -12,7 +12,7 @@ from backend.api.users.v1.profile.handlers import router as profile_router
 app.include_router(users_router)
 app.include_router(profile_router)
 
-origins = ["http://localhost:*", ]
+origins = ["http://localhost:3000", ]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
