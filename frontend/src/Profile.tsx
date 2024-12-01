@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { ReactComponent as Logo } from './logo.svg';
@@ -8,13 +8,36 @@ export const Profile = () => {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['auth']);
 
-  let data = {
-    name: '',
-    email: '',
-    age: '',
-  };
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
 
-  const response = data;
+  const load_profile = async () => {
+    const data = {
+      method: "GET",
+      headers: {"Authorization": 'Bearer ' + cookies.auth},
+    }
+
+    const res = await fetch('http://localhost:8000/api/users/v1/profile/me', data);
+    const json = await res.json();
+    setName(json["data"]["name"]);
+    setEmail(json["data"]["email"]);
+    setAge(json["data"]["age"]);
+  }
+
+  useEffect(() => {
+    load_profile()
+  }, [])
+
+  const save_profile = async () => {
+    const data = {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + cookies.auth, 'Content-Type': 'application/json'},
+      body: JSON.stringify({name: name, age: age})
+    };
+    await fetch('http://localhost:8000/api/users/v1/profile/me', data)
+    return
+  }
 
   function Exit() {
     if (cookies.auth) setCookie('auth', '', { 'path': '/' });
@@ -49,7 +72,11 @@ export const Profile = () => {
                 <Typography fontSize={18}>Name: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField label={data.name} fullWidth></TextField>
+                <TextField
+                    label={name}
+                    fullWidth
+                    onChange={(e) => {setName(e.target.value)}}
+                ></TextField>
               </Stack>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
@@ -57,7 +84,7 @@ export const Profile = () => {
                 <Typography fontSize={18}>Email: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField label={data.email} fullWidth></TextField>
+                <TextField label={email} fullWidth></TextField>
               </Stack>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
@@ -65,12 +92,16 @@ export const Profile = () => {
                 <Typography fontSize={18}>Age: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField label={data.age} fullWidth></TextField>
+                <TextField
+                    label={age}
+                    fullWidth
+                    onChange={(e) => {setAge(e.target.value)}}
+                ></TextField>
               </Stack>
             </Stack>
             <Stack alignItems="center">
               <Stack width="20%" alignItems="center">
-                <Button>Save</Button>
+                <Button onClick={save_profile}>Save</Button>
                 <Button onClick={Exit}>Exit from profile</Button>
               </Stack>
             </Stack>

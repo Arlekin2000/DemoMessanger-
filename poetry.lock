@@ -227,6 +227,21 @@ docs = ["alabaster (==1.0.0)", "autodocsumm (==0.2.14)", "sphinx (==8.1.3)", "sp
 tests = ["pytest", "simplejson"]
 
 [[package]]
+name = "marshmallow-peewee"
+version = "5.0.0"
+description = "Peewee ORM integration with the Marshmallow (de)serialization library"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "marshmallow_peewee-5.0.0-py3-none-any.whl", hash = "sha256:f64f6032b6647fd90786757cdff9c9c17ce8e49c8af7e6d0c5749e3741086e8b"},
+    {file = "marshmallow_peewee-5.0.0.tar.gz", hash = "sha256:c963f3b2914490354055979e25b9a92c87c5a1f72c5fee785667b3e1c336a817"},
+]
+
+[package.dependencies]
+marshmallow = ">=3.0.0,<4.0.0"
+peewee = ">=3.14.0,<4.0.0"
+
+[[package]]
 name = "modconfig"
 version = "1.2.1"
 description = "Simple hierarchic configuration manager for apps"
@@ -570,4 +585,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "80feb803c2d26b4ac2af81b7b3f1ea535b2ec197c98e4a81fbf067d3a901381c"
+content-hash = "4fb8b560ec726f8d4a3ad44d6568650cfe1a180d35beb47fbc97febb74c72500"
