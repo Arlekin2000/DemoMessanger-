@@ -10,8 +10,10 @@ app = fastapi.FastAPI()
 
 from backend.api.users.v1.auth.handlers import router as auth_router
 from backend.api.users.v1.profile.handlers import router as profile_router
+from backend.api.users.v1.friends.handlers import router as friends_router
 app.include_router(auth_router)
 app.include_router(profile_router)
+app.include_router(friends_router)
 
 
 origins = [

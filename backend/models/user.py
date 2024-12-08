@@ -48,3 +48,20 @@ class User(BaseModel):
     def check_password(self, password: str):
         phash = hashlib.sha256(password.encode('utf-8')).hexdigest()
         return phash == self.password_hash
+
+
+@db.register
+class Friends(BaseModel):
+    user = fields.ForeignKeyField(
+        model=User,
+        field=User.id,
+        backref="friends",
+        on_delete="CASCADE"
+    )
+    friend = fields.ForeignKeyField(
+        model=User,
+        field=User.id
+    )
+
+    class Meta:
+        indexes = ((("user_id", "friend_id"), True),)
