@@ -12,7 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [cookies, setCookie] = useCookies(['auth']);
+  const [cookies, setCookie] = useCookies(['auth', 'c_email']);
 
   const login = async () => {
     const data = {
@@ -26,6 +26,7 @@ export default function Login() {
             (result) => {
               if (result['success'] === true) {
                 setCookie('auth', result['token'], {'path': '/'})
+                setCookie('c_email', email, {'path': '/'})
                 navigate('/profile')
               } else {
                 setShowAlert(true)
@@ -50,6 +51,7 @@ export default function Login() {
             (result) => {
               if (result['success'] === true) {
                 setCookie('auth', result['token'], {'path': '/'})
+                setCookie('c_email', email, {'path': '/'})
                 navigate('/profile')
               } else {
                 setShowAlert(true)

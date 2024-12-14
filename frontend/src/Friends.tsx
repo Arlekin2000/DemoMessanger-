@@ -1,36 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Stack, TextField, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 export default function Friends() {
   const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(['auth'])
+  const [friends_list, setFriendsList] = useState<any[]>([])
 
-  const friends_list = [
-      {
-        nickname: "givisisia",
-        firstname: "Гиви",
-        lastname: "Мавесисян",
-        age: 21,
-        sex: "male",
-        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5YcXYAUmu5asP_70zHZHg92s1CVXGteaqpQ&s"
-      },
-      {
-        nickname: "chtoto_pokoleno",
-        firstname: "Пиколини",
-        lastname: "Поколено",
-        age: 22,
-        sex: "male",
-        avatar: "https://sun1-23.userapi.com/s/v1/ig2/7-_j2rc_5v4dJs4Bb6u9Ah85FxcctjGrIpOwKfLzZ-TJfxzFg_4OkdVcmF8V2wFq1a0Ge6fjWTP4ELGuYdC0OsQ2.jpg?quality=95&crop=796,125,509,509&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480&ava=1&u=lvfUeQhhU5vhMBofc6oFPtmY5na3yWM1u1KJEU_SMeU&cs=200x200"
-      },
-      {
-        nickname: "ein_schtein",
-        firstname: "Альберт",
-        lastname: "Однокамнев",
-        age: 23,
-        sex: "male",
-        avatar: "https://big-i.ru/upload/iblock/426/1xrtnl61ku66l9xuywnfk6dyy04u5c0v.jpg"
-      }
-  ]
+  async function get_friends(){
+    const data = {
+      method: 'GET',
+      headers: {'Authorization': 'Bearer ' + cookies.auth, 'Content-Type': 'application/json'}
+    };
+    const res = await fetch('http://localhost:8000/api/users/v1/friends', data)
+    const json = await res.json()
+    setFriendsList(json["data"])
+  }
+
+  useEffect(() => {get_friends()}, [])
 
   return (
       <Stack spacing={2} pt={3} alignItems="center" width="100%">
@@ -53,7 +41,7 @@ export default function Friends() {
                             spacing={1}
                             alignItems="center"
                             width="80%"
-                            onClick={() => navigate('/profile')}
+                            onClick={() => navigate(`/profile?profile_id=${item.id}`)}
                             style={{ background: "#dddddd", padding: 7, borderRadius: 20 }}
                         >
                             <Stack width="40%" alignItems="center">
@@ -67,11 +55,11 @@ export default function Friends() {
                                       borderRadius: 20
                                   }}
                                   alt="User icon"
-                                  src={ item.avatar }
+                                  src='https://media.istockphoto.com/id/1300845620/ru/векторная/пользователь-icon-flat-изолирован-на-белом-фоне-символ-пользователя-иллюстрация-вектора.jpg?s=612x612&w=0&k=20&c=Po5TTi0yw6lM7qz6yay5vUbUBy3kAEWrpQmDaUMWnek='
                                 />
                             </Stack>
                             <Stack spacing={2} width="60%" alignItems="flex-start">
-                                <h2>{ item.firstname } { item.lastname }</h2> <h3>({ item.nickname })</h3>
+                                <h2>{ item.name }</h2> <h3>{ item.age }</h3>
                             </Stack>
                         </Stack>
                     )

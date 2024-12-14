@@ -2,41 +2,57 @@ import React, { useEffect, useState } from 'react';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { ReactComponent as Logo } from './logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const Profile = () => {
+  const [ searchParams ] = useSearchParams();
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['auth']);
+  const [cookies, setCookie] = useCookies(['auth', 'c_email']);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
+  const [is_my_friend, setIsMyFriend] = useState(false);
 
-  const load_profile = async () => {
+  async function load_profile(profile_id:any){
     const data = {
       method: "GET",
       headers: {"Authorization": 'Bearer ' + cookies.auth},
     }
 
-    const res = await fetch('http://localhost:8000/api/users/v1/profile/me', data);
+    const url_end = profile_id ? `?profile_id=${profile_id}` : '/me'
+
+    const res = await fetch(`http://localhost:8000/api/users/v1/profile${url_end}`, data);
     const json = await res.json();
     setName(json["data"]["name"]);
     setEmail(json["data"]["email"]);
     setAge(json["data"]["age"]);
+    setIsMyFriend(json["data"]["friend"]);
   }
 
+  const profile_id = searchParams.get("profile_id")
   useEffect(() => {
-    load_profile()
-  }, [])
+    load_profile(profile_id)
+  }, [profile_id])
 
-  const save_profile = async () => {
+  async function save_profile(){
     const data = {
       method: 'POST',
       headers: {'Authorization': 'Bearer ' + cookies.auth, 'Content-Type': 'application/json'},
-      body: JSON.stringify({name: name, age: age})
+      body: JSON.stringify({name: name, email: email, age: age})
     };
     await fetch('http://localhost:8000/api/users/v1/profile/me', data)
     return
+  }
+
+  async function add_friend(){
+    const data = {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + cookies.auth, 'Content-Type': 'application/json'},
+      body: JSON.stringify({})
+    };
+    await fetch(`http://localhost:8000/api/users/v1/friends/${profile_id}`, data)
+    navigate('/friends');
   }
 
   function Exit() {
@@ -101,7 +117,15 @@ export const Profile = () => {
             </Stack>
             <Stack alignItems="center">
               <Stack width="20%" alignItems="center">
-                <Button onClick={save_profile}>Save</Button>
+                { (cookies["c_email"] === email) &&
+                  <Button onClick={save_profile}>Save</Button>
+                }
+                { (cookies["c_email"] !== email && !is_my_friend) &&
+                  <Button onClick={add_friend}>Add friend</Button>
+                }
+                { (cookies["c_email"] !== email && is_my_friend) &&
+                  <Typography fontSize={18}>You are friends</Typography>
+                }
                 <Button onClick={Exit}>Exit from profile</Button>
               </Stack>
             </Stack>
