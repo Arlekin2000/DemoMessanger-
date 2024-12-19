@@ -34,6 +34,7 @@ async def add_friend(request: Request, user: Annotated[User, Depends(check_crede
 
     try:
         await Friends.insert(user=user, friend=friend)
+        await Friends.insert(user=friend, friend=user)
     except IntegrityError:
         raise HTTPException(status_code=400, detail="Friend already exists")
 

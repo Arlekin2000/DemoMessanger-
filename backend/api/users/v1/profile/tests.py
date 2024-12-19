@@ -1,6 +1,6 @@
 from marshmallow import ValidationError
 
-from backend.models import User
+from backend.models import User, Friends
 
 
 async def test_my_profile(app, client):
@@ -101,3 +101,35 @@ async def test_my_profile_edit_with_wrong_data(app, client):
         json={"email": "john@gmail.com", "name": "Малкович", "age": 55, "id": 2}
     )
     assert res.status_code == 400
+
+
+async def test_get_profile_by_id(client):
+    user1 = await User.create(
+        email="john@gmail.com",
+    )
+    user2 = await User.create(
+        email="tom@gmail.com",
+    )
+    friends = await Friends.create(
+        user=user1,
+        friend=user2
+    )
+
+    res = client.get(
+        '/api/users/v1/profile',
+        headers={"Authorization": f"Bearer {user1.token}"}
+    )
+    assert res.status_code == 404
+
+    res = client.get(
+        '/api/users/v1/profile?profile_id=2',
+        headers={"Authorization": f"Bearer {user1.token}"}
+    )
+    assert res.status_code == 200
+    json = res.json()
+    assert json["success"]
+    assert json['data']["id"] == 2
+    assert json["data"]["email"] == "tom@gmail.com"
+    assert json["data"]["name"] is None
+    assert json["data"]["age"] is None
+    assert json['data']["friend"]
