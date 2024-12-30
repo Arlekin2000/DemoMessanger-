@@ -42,3 +42,15 @@ async def add_friend(request: Request, user: Annotated[User, Depends(check_crede
         "success": True,
         "data": FriendsSchema().dump(friend)
     }
+
+
+@router.delete('/{id}')
+async def del_friend(request: Request, user: Annotated[User, Depends(check_credentials)]):
+    friend_id = request.path_params.get('id')
+    res = await Friends.delete().where(Friends.user_id == user.id, Friends.friend_id == friend_id)
+    res += await Friends.delete().where(Friends.friend_id == user.id, Friends.user_id == friend_id)
+
+    return {
+        "success": True,
+        "deleted": res
+    }

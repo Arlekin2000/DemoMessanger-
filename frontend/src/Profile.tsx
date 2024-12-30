@@ -75,24 +75,30 @@ export const Profile = () => {
         >
           <Stack spacing={2} pt={3} width="25%">
             <Typography fontWeight="bold" fontSize={28}>
-              Your Photo
+              { (cookies["c_email"] === email) ?
+                  "Your Photo": "Photo"
+              }
             </Typography>
             <Logo />
           </Stack>
           <Stack spacing={2} pt={3} width="75%">
             <Typography fontWeight="bold" fontSize={28}>
-              Your profile
+              { (cookies["c_email"] === email) ?
+                  "Your Profile": "Profile"
+              }
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center">
               <Stack spacing={2} alignItems="center" width="20%">
                 <Typography fontSize={18}>Name: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField
+                { (cookies["c_email"] === email) ?
+                    <TextField
                     label={name}
                     fullWidth
                     onChange={(e) => {setName(e.target.value)}}
-                ></TextField>
+                ></TextField> : <Typography fontSize={18}> { name } </Typography>
+                }
               </Stack>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
@@ -100,7 +106,10 @@ export const Profile = () => {
                 <Typography fontSize={18}>Email: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField label={email} fullWidth></TextField>
+                { (cookies["c_email"] === email) ?
+                    <TextField label={email} fullWidth></TextField> :
+                    <Typography fontSize={18}> { email } </Typography>
+                }
               </Stack>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
@@ -108,11 +117,13 @@ export const Profile = () => {
                 <Typography fontSize={18}>Age: </Typography>
               </Stack>
               <Stack spacing={2} alignItems="center" width="80%">
-                <TextField
+                { (cookies["c_email"] === email) ?
+                    <TextField
                     label={age}
                     fullWidth
                     onChange={(e) => {setAge(e.target.value)}}
-                ></TextField>
+                ></TextField> : <Typography fontSize={18}> { age } </Typography>
+                }
               </Stack>
             </Stack>
             <Stack alignItems="center">

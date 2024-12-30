@@ -56,3 +56,25 @@ async def test_add_friend(client):
     assert json["data"] == {"id": friend.id, "name": friend.name, "age": friend.age}
 
     assert await user.friends.count() == 1
+
+
+async def test_del_friend(client):
+    user1 = await User.create(email="john1@gmail.com")
+    user2 = await User.create(email="john2@gmail.com")
+
+    await Friends.create(user=user1, friend=user2)
+    await Friends.create(user=user2, friend=user1)
+
+    assert await user1.friends.count() == 1
+
+    res = client.delete(
+        f'/api/users/v1/friends/{user2.id}',
+        headers={"Authorization": f"Bearer {user1.token}"}
+    )
+    assert res.status_code == 200
+    json = res.json()
+    assert json["success"]
+    assert json["deleted"] == 2
+
+    assert await user1.friends.count() == 0
+    assert await Friends.select().count() == 0

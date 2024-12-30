@@ -41,6 +41,14 @@ export const Header = () => {
         >
           Messages
         </Button>
+        <Button
+          variant="contained"
+          onClick={() => navigate('users')}
+          fullWidth
+          color="info"
+        >
+          Users
+        </Button>
       </Stack>
     </CookiesProvider>
   );

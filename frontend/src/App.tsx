@@ -5,6 +5,7 @@ import './App.css';
 import Login from './Login';
 import Friends from './Friends';
 import Messages from "./Messages";
+import Users from './Users'
 import { Profile } from './Profile';
 import { Header } from './Header';
 import { Stack } from '@mui/material';
@@ -25,6 +26,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/messages" element={<Messages />} />
+              <Route path="/users" element={<Users />} />
             </Routes>
           </Stack>
         ) : (
