@@ -127,6 +127,7 @@ async def load_more_message(request: Request, user: Annotated[User, Depends(chec
 
     return {"success": True, "messages": schema.dump(messages, many=True)}
 
+
 @router.delete("/{message_id}/{companion_id}")
 async def delete_message(request: Request, user: Annotated[User, Depends(check_credentials)]):
     companion_id = int(request.path_params.get("companion_id"))

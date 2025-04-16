@@ -1,10 +1,9 @@
-from email.policy import default
-
 from peewee_aio import fields
 
 from .base import BaseModel
 from .user import User
 from backend.models import db
+
 
 @db.register
 class Messages(BaseModel):
