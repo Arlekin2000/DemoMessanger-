@@ -86,7 +86,7 @@ async def get_messages_for_chat(request: Request, user: Annotated[User, Depends(
             conflict_target=(LastReadMessage.user_id, LastReadMessage.chat_id),
             update={LastReadMessage.message_id: messages[-1].message_id}
         )
-    print(messages)
+
     return {"success": True, "messages": schema.dump(messages, many=True)}
 
 
