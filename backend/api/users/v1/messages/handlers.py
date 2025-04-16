@@ -62,7 +62,6 @@ async def get_messages_for_chat(request: Request, user: Annotated[User, Depends(
         .where(
             LastReadMessage.user_id == user.id,
             LastReadMessage.chat_id == chat_id,
-            ~Messages.is_hidden
         ).first()
     )
     if last_read and last_read.message_id >= 15:
@@ -72,7 +71,10 @@ async def get_messages_for_chat(request: Request, user: Annotated[User, Depends(
 
     messages = (
         await Messages.select()
-        .where(*filters)
+        .where(
+            *filters,
+            ~Messages.is_hidden
+        )
         .order_by(Messages.id).limit(30)
     )
     if messages:
@@ -135,9 +137,10 @@ async def delete_message(request: Request, user: Annotated[User, Depends(check_c
     chat_id = Messages.make_chat_id(companion_id, user.id)
 
     message = await Messages.select().where(
-        User.id == companion_id,
-        Messages.id == message_id,
-        Messages.chat_id == chat_id).first()
+        Messages.user_id == user.id,
+        Messages.message_id == message_id,
+        Messages.chat_id == chat_id,
+    ).first()
 
     if not message:
         return HTTPException(
