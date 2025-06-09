@@ -88,7 +88,7 @@ export default function Login() {
   }
 
   const handleButtonClick = async (action_type: string) => {
-    if (action_type == 'login') {
+    if (action_type === 'login') {
       await login()
     } else if (action_type == 'register') {
       await register();

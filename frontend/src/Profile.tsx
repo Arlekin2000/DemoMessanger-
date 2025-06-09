@@ -11,11 +11,11 @@ export const Profile = () => {
   const [cookies, setCookie] = useCookies(['auth', 'c_email']);
 
   const [profile, setProfile] = useState({
-      name: "",
-      email: "",
-      age: "",
-      friend: false,
-      city: {value: null, label: null}
+    name: "",
+    email: "",
+    age: "",
+    friend: false,
+    city: {value: null, label: null}
   });
 
   const [cities, setCities] = useState([])
@@ -32,7 +32,7 @@ export const Profile = () => {
     const json = await res.json()
     const result: any = []
     json.forEach(
-        (city: any) => result.push({"value": city["id"], "label": city["name"]})
+      (city: any) => result.push({"value": city["id"], "label": city["name"]})
     )
     setCities(result)
   }
@@ -46,27 +46,26 @@ export const Profile = () => {
     const res = await fetch(`http://localhost:8000/api/users/v1/profile${url_end}`, data)
     const json = await res.json()
     setProfile({
-        ...json["data"],
-        ...{city: {"value": json["data"]["city"]["id"], "label": json["data"]["city"]["name"]}}
+      ...json["data"],
+      ...{city: {"value": json["data"]["city"]["id"], "label": json["data"]["city"]["name"]}}
     })
   }
 
   const profile_id = searchParams.get("profile_id")
   useEffect(() => {
-      load_profile(profile_id)
+    load_profile(profile_id)
   }, [profile_id])
 
   useEffect(() => {
-      get_cities()
+    get_cities()
   }, [find_city])
-
 
   async function save_profile(){
     const body = {
-        name: profile.name,
-        email: profile.email,
-        age: profile.age,
-        city: profile.city["value"] || null
+      name: profile.name,
+      email: profile.email,
+      age: profile.age,
+      city: profile.city["value"] || null
     }
     const data = {
       method: 'POST',
@@ -92,9 +91,31 @@ export const Profile = () => {
     navigate('/');
   }
 
+  const uploader = document.getElementById("image_uploader") as HTMLFormElement;
+  if (uploader) {
+      uploader.addEventListener('submit', handleSubmit);
+  }
+
+  function handleSubmit(event:any) {
+      event.preventDefault();
+      uploadFiles();
+  }
+
+  function uploadFiles() {
+    const url = "http://localhost:8000/api/users/v1/profile/me/upload/image/";
+    const formData = new FormData(uploader);
+    const fetchOptions = {
+      method: 'post',
+      headers: {'Authorization': 'Bearer ' + cookies.auth},
+      body: formData
+    };
+    fetch(url, fetchOptions);
+  }
+
+
   function updateProfile(data: {}){
-      const prof = {...profile, ...data}
-      setProfile(prof)
+    const prof = {...profile, ...data}
+    setProfile(prof)
   }
 
   return (
@@ -110,20 +131,38 @@ export const Profile = () => {
           width="70%"
           bgcolor="lightgray"
         >
-          <Stack spacing={2} pt={3} width="25%">
-            <Typography fontWeight="bold" fontSize={28}>
-              { (cookies["c_email"] === profile.email) ?
-                  "Your Photo": "Photo"
-              }
-            </Typography>
-            <Logo />
-          </Stack>
-          <Stack spacing={2} pt={3} width="75%">
-            <Typography fontWeight="bold" fontSize={28}>
-              { (cookies["c_email"] === profile.email) ?
+            <Stack spacing={2} pt={3} width="25%">
+                <Typography fontWeight="bold" fontSize={28}>
+                    {(cookies["c_email"] === profile.email) ?
+                        "Your Photo" : "Photo"
+                    }
+                </Typography>
+                <Logo/>
+                <form id="image_uploader">
+                    <input
+                        name="file"
+                        type="file"
+                        multiple accept="image/jpeg, image/png"/>
+                    <button type="submit">Upload</button>
+                </form>
+            </Stack>
+            <Stack spacing={2} pt={3} width="75%">
+                <Typography fontWeight="bold" fontSize={28}>
+                    {(cookies["c_email"] === profile.email) ?
                   "Your Profile": "Profile"
               }
             </Typography>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Stack spacing={2} alignItems="center" width="20%">
+                <Typography fontSize={18}>Email: </Typography>
+              </Stack>
+              <Stack spacing={2} alignItems="center" width="80%">
+                { (cookies["c_email"] === profile.email) ?
+                    <TextField disabled label={profile.email} fullWidth></TextField> :
+                    <Typography fontSize={18}> { profile.email } </Typography>
+                }
+              </Stack>
+            </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
               <Stack spacing={2} alignItems="center" width="20%">
                 <Typography fontSize={18}>Name: </Typography>
@@ -135,17 +174,6 @@ export const Profile = () => {
                     fullWidth
                     onChange={(e) => {updateProfile({name: e.target.value})}}
                 ></TextField> : <Typography fontSize={18}> { profile.name } </Typography>
-                }
-              </Stack>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Stack spacing={2} alignItems="center" width="20%">
-                <Typography fontSize={18}>Email: </Typography>
-              </Stack>
-              <Stack spacing={2} alignItems="center" width="80%">
-                { (cookies["c_email"] === profile.email) ?
-                    <TextField label={profile.email} fullWidth></TextField> :
-                    <Typography fontSize={18}> { profile.email } </Typography>
                 }
               </Stack>
             </Stack>

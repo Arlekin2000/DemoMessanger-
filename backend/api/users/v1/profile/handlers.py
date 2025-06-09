@@ -66,3 +66,11 @@ async def get_profile_by_id(request: Request, user: Annotated[User, Depends(chec
         "success": True,
         "data": dict(**SCHEMA.dump(profile), friend=is_friend)
     }
+
+
+@router.post('/me/upload/image')
+async def get_profile_by_id(request: Request, user: Annotated[User, Depends(check_credentials)]):
+    json = await request.form()
+    print("JSON", json)
+
+    return {"success": True}
