@@ -1,10 +1,10 @@
+from enum import Enum
 import hashlib
 import jwt
 from peewee_aio import fields
 from peewee_enum_field import EnumField
-from enum import Enum
 
-from .base import BaseModel
+from .base import BaseModel, City
 from backend.models import db
 
 
@@ -23,6 +23,7 @@ class User(BaseModel):
     gender = EnumField(Genders, null=True)
     email = fields.CharField(unique=True, null=False)
     password_hash = fields.CharField(null=True)
+    city = fields.ForeignKeyField(City, null=True)
 
     def __str__(self):
         return f"User <#{self.id} {self.email}>"

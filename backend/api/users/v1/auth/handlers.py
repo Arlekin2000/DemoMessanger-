@@ -1,7 +1,7 @@
 import fastapi
 
 from backend.models import User
-from .schemas import RegisterLoginSchema
+from .schemas import RegisterSchema, LoginSchema
 
 
 
@@ -11,7 +11,7 @@ router = fastapi.APIRouter(prefix="/api/users/v1", tags=["auth"])
 @router.post("/login")
 async def login(request: fastapi.Request):
     data = await request.json()
-    data = RegisterLoginSchema().load(data)
+    data = LoginSchema().load(data)
 
     user = await User.select().where(User.email == data["email"]).first()
     if not user:
@@ -26,11 +26,11 @@ async def login(request: fastapi.Request):
 @router.post("/register")
 async def register(request: fastapi.Request):
     data = await request.json()
-    data = RegisterLoginSchema().load(data)
+    data = RegisterSchema().load(data)
 
     user = await User.select().where(User.email == data["email"]).first()
     if not user:
-        user = await User.create(email=data["email"])
+        user = await User.create(email=data["email"], city_id=data["city"])
         await user.set_password(data["password"])
 
     return {"success": True, "id": user.id, "token": user.token}

@@ -1,9 +1,10 @@
 import asyncio
 import argparse
+import json
 import uvicorn
 
 from . import app
-from .models import User, Friends
+from .models import User, Friends, City
 
 
 def args_parser():
@@ -17,7 +18,13 @@ def args_parser():
 async def create_db():
     await User.create_table()
     await Friends.create_table()
-
+    await City.create_table()
+    with open("cities.json", "r") as file:
+        data = json.load(file)
+        for name, coords in data.items():
+            await City.insert(name=name, search_name=name.lower(), **coords)
+    for city in await City.select():
+        print(city.id, city.name, city.lat, city.lon)
 
 if __name__ == "__main__":
     parser = args_parser()

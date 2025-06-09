@@ -1,6 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 
+from backend.models import User
+
 
 @pytest.fixture(scope="session")
 def app():
@@ -16,10 +18,11 @@ def client(app):
 @pytest.fixture(autouse=True)
 async def setup_tests(app):
     """Rollback the database between tests."""
-    from backend.models import db, User, Friends
+    from backend.models import db, User, Friends, City
 
     async with db.transaction() as trans:
         await User.create_table()
         await Friends.create_table()
+        await City.create_table()
         yield db
         await trans.rollback()

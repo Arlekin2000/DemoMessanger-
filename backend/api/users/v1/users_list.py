@@ -36,5 +36,3 @@ async def get_users_list(request: Request, user: Annotated[User, Depends(check_c
         "success": True,
         "data": UsersListSchema().dump(users, many=True)
     }
-
-

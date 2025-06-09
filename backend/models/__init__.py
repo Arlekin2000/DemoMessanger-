@@ -1,2 +1,2 @@
-from .base import db
+from .base import db, City
 from .user import User, Friends
