@@ -7,7 +7,7 @@ import Alert from "@mui/material/Alert";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['auth', 'c_email']);
+  const [cookies, setCookie] = useCookies(['auth', 'c_email', 'userid']);
 
   const [showAlert, setShowAlert] = useState(false);
 
@@ -47,8 +47,9 @@ export default function Login() {
             (result) => {
               if (result['success'] === true) {
                 setCookie('auth', result['token'], {'path': '/'})
+                setCookie('userid', result['id'], {'path': '/'})
                 setCookie('c_email', email, {'path': '/'})
-                navigate('/profile')
+                navigate('/main')
               } else {
                 setShowAlert(true)
               }
@@ -72,8 +73,9 @@ export default function Login() {
             (result) => {
               if (result['success'] === true) {
                 setCookie('auth', result['token'], {'path': '/'})
+                setCookie('userid', result['id'], {'path': '/'})
                 setCookie('c_email', email, {'path': '/'})
-                navigate('/profile')
+                navigate('/main')
               } else {
                 setShowAlert(true)
               }
@@ -92,7 +94,7 @@ export default function Login() {
       await register();
     }
 
-    if (cookies.auth) navigate('/profile');
+    if (cookies.auth) navigate('/main');
   }
 
   useEffect(() => {
