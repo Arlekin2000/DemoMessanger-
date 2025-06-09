@@ -3,7 +3,7 @@ import argparse
 import uvicorn
 
 from . import app
-from .models import User, Friends
+from .models import User, Friends, Messages, LastReadMessage
 
 
 def args_parser():
@@ -17,6 +17,9 @@ def args_parser():
 async def create_db():
     await User.create_table()
     await Friends.create_table()
+    await Messages.create_table()
+    await LastReadMessage.create_table()
+
 
 
 if __name__ == "__main__":
