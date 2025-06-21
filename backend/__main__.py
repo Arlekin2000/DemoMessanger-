@@ -21,7 +21,6 @@ async def create_db():
     await Messages.create_table()
     await LastReadMessage.create_table()
 
-
     await City.create_table()
     with open("cities.json", "r") as file:
         data = json.load(file)

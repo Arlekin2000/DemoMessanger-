@@ -20,5 +20,5 @@ async def get_cities(request: Request):
     if where:
         query = query.where(City.search_name.startswith(where.lower()))
 
-    query = query.limit(100)
+    # query = query.limit(100)
     return CitySchema().dump(await query, many=True)
